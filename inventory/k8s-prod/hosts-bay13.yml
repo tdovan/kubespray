@@ -16,6 +16,10 @@ all:
       ansible_host: 10.202.115.138
       ip: 10.202.115.138
       access_ip: 10.202.115.138
+    bay13:
+      ansible_host: 10.202.115.94
+      ip: 10.202.115.94
+      access_ip: 10.202.115.94
   children:
     kube-master:
       hosts:
@@ -27,6 +31,7 @@ all:
         bay10:
         bay11:
         bay12:
+        bay13:
     etcd:
       hosts:
         bay9:
