@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    kubernetes.io/createdby: portworx-volume-dynamic-provisioner
+    pv.kubernetes.io/bound-by-controller: "yes"
+    pv.kubernetes.io/provisioned-by: kubernetes.io/portworx-volume
+  creationTimestamp: null
+  finalizers:
+  - kubernetes.io/pv-protection
+  name: pvc-f7aa5eaf-a19b-11e9-be54-0017a47700b8
+  selfLink: /api/v1/persistentvolumes/pvc-f7aa5eaf-a19b-11e9-be54-0017a47700b8
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: minio-pv-claim
+    namespace: istio-demo
+    resourceVersion: "5238951"
+    uid: f7aa5eaf-a19b-11e9-be54-0017a47700b8
+  persistentVolumeReclaimPolicy: Delete
+  portworxVolume:
+    volumeID: "1006840178598989545"
+  storageClassName: portworx-sc
+  volumeMode: Filesystem
+status: {}

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: productcatalogservice
+  selfLink: /api/v1/namespaces/istio-hipstershop/services/productcatalogservice
+spec:
+  ports:
+  - name: grpc
+    port: 3550
+    protocol: TCP
+    targetPort: 3550
+  selector:
+    app: productcatalogservice
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

@@ -1,0 +1,94 @@
+apiVersion: v1
+data:
+  ClusterConfiguration: |
+    apiServer:
+      certSANs:
+      - kubernetes
+      - kubernetes.default
+      - kubernetes.default.svc
+      - kubernetes.default.svc.k8s-prod
+      - 10.233.0.1
+      - localhost
+      - 127.0.0.1
+      - bay9
+      - bay10
+      - lb-apiserver.kubernetes.local
+      - 10.202.115.135
+      - 10.202.115.136
+      extraArgs:
+        allow-privileged: "true"
+        anonymous-auth: "True"
+        apiserver-count: "2"
+        authorization-mode: Node,RBAC
+        bind-address: 0.0.0.0
+        enable-aggregator-routing: "False"
+        endpoint-reconciler-type: lease
+        insecure-port: "0"
+        kubelet-preferred-address-types: InternalDNS,InternalIP,Hostname,ExternalDNS,ExternalIP
+        profiling: "False"
+        request-timeout: 1m0s
+        runtime-config: ""
+        service-node-port-range: 30000-32767
+        storage-backend: etcd3
+      extraVolumes:
+      - hostPath: /etc/pki/tls
+        mountPath: /etc/pki/tls
+        name: etc-pki-tls
+        readOnly: true
+      - hostPath: /etc/pki/ca-trust
+        mountPath: /etc/pki/ca-trust
+        name: etc-pki-ca-trust
+        readOnly: true
+      timeoutForControlPlane: 5m0s
+    apiVersion: kubeadm.k8s.io/v1beta2
+    certificatesDir: /etc/kubernetes/ssl
+    clusterName: k8s-prod
+    controlPlaneEndpoint: 10.202.115.135:6443
+    controllerManager:
+      extraArgs:
+        bind-address: 0.0.0.0
+        configure-cloud-routes: "false"
+        node-cidr-mask-size: "24"
+        node-monitor-grace-period: 40s
+        node-monitor-period: 5s
+        pod-eviction-timeout: 5m0s
+        profiling: "False"
+        terminated-pod-gc-threshold: "12500"
+    dns:
+      imageRepository: docker.io/coredns
+      imageTag: 1.5.0
+      type: CoreDNS
+    etcd:
+      external:
+        caFile: /etc/ssl/etcd/ssl/ca.pem
+        certFile: /etc/ssl/etcd/ssl/node-bay9.pem
+        endpoints:
+        - https://10.202.115.135:2379
+        - https://10.202.115.136:2379
+        - https://10.202.115.137:2379
+        keyFile: /etc/ssl/etcd/ssl/node-bay9-key.pem
+    imageRepository: gcr.io/google-containers
+    kind: ClusterConfiguration
+    kubernetesVersion: v1.15.0
+    networking:
+      dnsDomain: k8s-prod
+      podSubnet: 10.233.64.0/18
+      serviceSubnet: 10.233.0.0/18
+    scheduler:
+      extraArgs:
+        bind-address: 0.0.0.0
+  ClusterStatus: |
+    apiEndpoints:
+      bay9:
+        advertiseAddress: 10.202.115.135
+        bindPort: 6443
+      bay10:
+        advertiseAddress: 10.202.115.136
+        bindPort: 6443
+    apiVersion: kubeadm.k8s.io/v1beta2
+    kind: ClusterStatus
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: kubeadm-config
+  selfLink: /api/v1/namespaces/kube-system/configmaps/kubeadm-config

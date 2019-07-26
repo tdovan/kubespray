@@ -1,0 +1,8 @@
+apiVersion: v1
+data:
+  linear: '{"coresPerReplica":256,"min":2,"nodesPerReplica":16,"preventSinglePointFailure":true}'
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: dns-autoscaler
+  selfLink: /api/v1/namespaces/kube-system/configmaps/dns-autoscaler

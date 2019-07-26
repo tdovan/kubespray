@@ -1,0 +1,58 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  creationTimestamp: null
+  labels:
+    app: cost-analyzer
+    app.kubernetes.io/instance: kubecost
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: cost-analyzer
+    helm.sh/chart: cost-analyzer-1.32.0
+  name: cost-analyzer-checks
+  selfLink: /apis/batch/v1beta1/namespaces/kubecost/cronjobs/cost-analyzer-checks
+spec:
+  concurrencyPolicy: Allow
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    metadata:
+      creationTimestamp: null
+    spec:
+      template:
+        metadata:
+          creationTimestamp: null
+        spec:
+          containers:
+          - args:
+            - node
+            - ./node/cron.js
+            env:
+            - name: COST_ANALYZER_SERVER_ENDPOINT
+              value: kubecost-cost-analyzer.kubecost.svc.cluster.local:9001
+            - name: COST_ANALYZER_MODEL_ENDPOINT
+              value: kubecost-cost-analyzer.kubecost.svc.cluster.local:9003
+            - name: PROMETHEUS_ALERTMANAGER_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  key: prometheus-alertmanager-endpoint
+                  name: kubecost-cost-analyzer
+            image: ajaytripathy/kubecost-checks:prod-1.32.0
+            imagePullPolicy: IfNotPresent
+            name: cost-analyzer-checks
+            resources:
+              limits:
+                cpu: 100m
+                memory: 200Mi
+              requests:
+                cpu: 20m
+                memory: 100Mi
+            terminationMessagePath: /dev/termination-log
+            terminationMessagePolicy: File
+          dnsPolicy: ClusterFirst
+          restartPolicy: OnFailure
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+  schedule: '*/10 * * * *'
+  successfulJobsHistoryLimit: 3
+  suspend: false
+status: {}

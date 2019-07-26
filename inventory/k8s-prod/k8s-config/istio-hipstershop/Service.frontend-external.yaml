@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: frontend-external
+  selfLink: /api/v1/namespaces/istio-hipstershop/services/frontend-external
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: http
+    nodePort: 30028
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: frontend
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}

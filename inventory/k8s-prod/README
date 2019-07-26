@@ -1,9 +1,11 @@
+#### to create
 
 #### to update
       ansible-playbook -i inventory/k8s-prod/hosts.yml --become --become-user=root cluster.yml
  
 #### to scale
        ansible-playbook -i inventory/k8s-prod/hosts.yml scale.yml -b -v
+       ansible-playbook -i inventory/k8s-prod/hosts.yml scale.yml -b -v -flush-cache
 
 #### to remove
        ansible-playbook -i inventory/k8s-prod/hosts.yml remove-node.yml -b -v --extra-vars "node=bay13"

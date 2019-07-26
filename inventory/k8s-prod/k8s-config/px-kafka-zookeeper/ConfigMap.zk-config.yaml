@@ -1,0 +1,15 @@
+apiVersion: v1
+data:
+  client.cnxns: "60"
+  ensemble: zk-0;zk-1;zk-2
+  init: "10"
+  jvm.heap: 512M
+  purge.interval: "1"
+  snap.retain: "3"
+  sync: "5"
+  tick: "2000"
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: zk-config
+  selfLink: /api/v1/namespaces/px-kafka-zookeeper/configmaps/zk-config

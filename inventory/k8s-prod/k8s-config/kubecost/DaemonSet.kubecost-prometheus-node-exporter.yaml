@@ -1,0 +1,80 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: prometheus
+    chart: prometheus-8.11.0
+    component: node-exporter
+    heritage: Tiller
+    release: kubecost
+  name: kubecost-prometheus-node-exporter
+  selfLink: /apis/extensions/v1beta1/namespaces/kubecost/daemonsets/kubecost-prometheus-node-exporter
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: prometheus
+      component: node-exporter
+      release: kubecost
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: prometheus
+        chart: prometheus-8.11.0
+        component: node-exporter
+        heritage: Tiller
+        release: kubecost
+    spec:
+      containers:
+      - args:
+        - --path.procfs=/host/proc
+        - --path.sysfs=/host/sys
+        image: prom/node-exporter:v0.17.0
+        imagePullPolicy: IfNotPresent
+        name: prometheus-node-exporter
+        ports:
+        - containerPort: 9100
+          hostPort: 9100
+          name: metrics
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /host/proc
+          name: proc
+          readOnly: true
+        - mountPath: /host/sys
+          name: sys
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      hostPID: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: kubecost-prometheus-node-exporter
+      serviceAccountName: kubecost-prometheus-node-exporter
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /proc
+          type: ""
+        name: proc
+      - hostPath:
+          path: /sys
+          type: ""
+        name: sys
+  templateGeneration: 1
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+status:
+  currentNumberScheduled: 0
+  desiredNumberScheduled: 0
+  numberMisscheduled: 0
+  numberReady: 0

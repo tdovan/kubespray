@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    pv.kubernetes.io/bind-completed: "yes"
+    pv.kubernetes.io/bound-by-controller: "yes"
+    volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/portworx-volume
+  creationTimestamp: null
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app: kafka
+  name: data-kafka-0
+  selfLink: /api/v1/namespaces/px-kafka-zookeeper/persistentvolumeclaims/data-kafka-0
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 3Gi
+  storageClassName: portworx-sc-rep2
+  volumeMode: Filesystem
+  volumeName: pvc-b15a3458-a210-11e9-9f25-0017a47700c0
+status: {}

@@ -1,0 +1,53 @@
+all:
+  hosts:
+    k8s-dev-r3-m1:
+      ansible_host: 10.202.115.94
+      ip: 10.202.115.94
+      access_ip: 10.202.115.94
+    k8s-dev-r3-m2:
+      ansible_host: 10.202.115.1
+      ip: 10.202.115.1
+      access_ip: 10.202.115.1
+    k8s-dev-r3-w1:
+      ansible_host: 10.202.115.55
+      ip: 10.202.115.55
+      access_ip: 10.202.115.55
+    k8s-dev-r3-w2:
+      ansible_host: 10.202.115.36
+      ip: 10.202.115.36
+      access_ip: 10.202.115.36
+    k8s-dev-r3-w3:
+      ansible_host: 10.202.115.30
+      ip: 10.202.115.30
+      access_ip: 10.202.115.30
+#    k8s-dev-r3-w4:
+#      ansible_host: 10.202.115.
+#      ip: 10.202.115.
+#      access_ip: 10.202.115.
+#    k8s-dev-r3-w5:
+#      ansible_host: 10.202.115.
+#      ip: 10.202.115.
+#      access_ip: 10.202.115.
+  children:
+    kube-master:
+      hosts:
+        k8s-dev-r3-m1:
+        k8s-dev-r3-m2:
+    kube-node:
+      hosts:
+        k8s-dev-r3-w1:
+        k8s-dev-r3-w2:
+#        k8s-dev-r3-w3:
+#        k8s-dev-r3-w4:
+#        k8s-dev-r3-w5:
+    etcd:
+      hosts:
+        k8s-dev-r3-m1:
+        k8s-dev-r3-m2:
+        k8s-dev-r3-w1:
+    k8s-cluster:
+      children:
+        kube-master:
+        kube-node:
+    calico-rr:
+      hosts: {}

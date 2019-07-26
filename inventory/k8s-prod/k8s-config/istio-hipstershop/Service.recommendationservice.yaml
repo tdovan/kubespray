@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: recommendationservice
+  selfLink: /api/v1/namespaces/istio-hipstershop/services/recommendationservice
+spec:
+  ports:
+  - name: grpc
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: recommendationservice
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

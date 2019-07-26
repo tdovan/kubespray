@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"name":"meow-svc","namespace":"meow"},"spec":{"ports":[{"name":"http","port":80,"protocol":"TCP","targetPort":8080}],"selector":{"app":"meow"}}}
+  creationTimestamp: null
+  name: meow-svc
+  selfLink: /api/v1/namespaces/meow/services/meow-svc
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: meow
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

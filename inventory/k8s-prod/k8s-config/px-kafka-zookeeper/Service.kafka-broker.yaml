@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: kafka-broker
+  selfLink: /api/v1/namespaces/px-kafka-zookeeper/services/kafka-broker
+spec:
+  clusterIP: None
+  ports:
+  - port: 9092
+    protocol: TCP
+    targetPort: 9092
+  selector:
+    app: kafka
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

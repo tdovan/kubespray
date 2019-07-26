@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app.kubernetes.io/name":"default-backend","app.kubernetes.io/part-of":"ingress-nginx"},"name":"default-backend","namespace":"ingress-nginx"},"spec":{"ports":[{"port":80,"targetPort":8080}],"selector":{"app.kubernetes.io/name":"default-backend","app.kubernetes.io/part-of":"ingress-nginx"}}}
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/name: default-backend
+    app.kubernetes.io/part-of: ingress-nginx
+  name: default-backend
+  selfLink: /api/v1/namespaces/ingress-nginx/services/default-backend
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app.kubernetes.io/name: default-backend
+    app.kubernetes.io/part-of: ingress-nginx
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

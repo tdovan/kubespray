@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  annotations:
+    control-plane.alpha.kubernetes.io/leader: '{"holderIdentity":"stork-7c9bd55854-t4t4f","leaseDurationSeconds":15,"acquireTime":"2019-07-12T11:08:21Z","renewTime":"2019-07-16T17:33:23Z","leaderTransitions":129}'
+  creationTimestamp: null
+  name: stork
+  selfLink: /api/v1/namespaces/kube-system/configmaps/stork

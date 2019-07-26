@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{},"labels":{"app":"sleep"},"name":"sleep","namespace":"istio-demo"},"spec":{"ports":[{"name":"http","port":80}],"selector":{"app":"sleep"}}}
+  creationTimestamp: null
+  labels:
+    app: sleep
+  name: sleep
+  selfLink: /api/v1/namespaces/istio-demo/services/sleep
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: sleep
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

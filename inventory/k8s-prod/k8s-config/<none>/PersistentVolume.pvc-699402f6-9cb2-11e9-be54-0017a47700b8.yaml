@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    kubernetes.io/createdby: portworx-volume-dynamic-provisioner
+    pv.kubernetes.io/bound-by-controller: "yes"
+    pv.kubernetes.io/provisioned-by: kubernetes.io/portworx-volume
+  creationTimestamp: null
+  finalizers:
+  - kubernetes.io/pv-protection
+  name: pvc-699402f6-9cb2-11e9-be54-0017a47700b8
+  selfLink: /api/v1/persistentvolumes/pvc-699402f6-9cb2-11e9-be54-0017a47700b8
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 10Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: argo-minio
+    namespace: istio-demo
+    resourceVersion: "3601655"
+    uid: 699402f6-9cb2-11e9-be54-0017a47700b8
+  persistentVolumeReclaimPolicy: Delete
+  portworxVolume:
+    volumeID: "456755317778294211"
+  storageClassName: portworx-sc
+  volumeMode: Filesystem
+status: {}

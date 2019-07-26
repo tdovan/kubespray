@@ -1,0 +1,127 @@
+apiVersion: v1
+data:
+  validatingwebhookconfiguration.yaml: |-
+    apiVersion: admissionregistration.k8s.io/v1beta1
+    kind: ValidatingWebhookConfiguration
+    metadata:
+      name: istio-galley
+      namespace: istio-system
+      labels:
+        app: galley
+        chart: galley
+        heritage: Tiller
+        release: istio
+        istio: galley
+    webhooks:
+      - name: pilot.validation.istio.io
+        clientConfig:
+          service:
+            name: istio-galley
+            namespace: istio-system
+            path: "/admitpilot"
+          caBundle: ""
+        rules:
+          - operations:
+            - CREATE
+            - UPDATE
+            apiGroups:
+            - config.istio.io
+            apiVersions:
+            - v1alpha2
+            resources:
+            - httpapispecs
+            - httpapispecbindings
+            - quotaspecs
+            - quotaspecbindings
+          - operations:
+            - CREATE
+            - UPDATE
+            apiGroups:
+            - rbac.istio.io
+            apiVersions:
+            - "*"
+            resources:
+            - "*"
+          - operations:
+            - CREATE
+            - UPDATE
+            apiGroups:
+            - authentication.istio.io
+            apiVersions:
+            - "*"
+            resources:
+            - "*"
+          - operations:
+            - CREATE
+            - UPDATE
+            apiGroups:
+            - networking.istio.io
+            apiVersions:
+            - "*"
+            resources:
+            - destinationrules
+            - envoyfilters
+            - gateways
+            - serviceentries
+            - sidecars
+            - virtualservices
+        failurePolicy: Fail
+      - name: mixer.validation.istio.io
+        clientConfig:
+          service:
+            name: istio-galley
+            namespace: istio-system
+            path: "/admitmixer"
+          caBundle: ""
+        rules:
+          - operations:
+            - CREATE
+            - UPDATE
+            apiGroups:
+            - config.istio.io
+            apiVersions:
+            - v1alpha2
+            resources:
+            - rules
+            - attributemanifests
+            - circonuses
+            - deniers
+            - fluentds
+            - kubernetesenvs
+            - listcheckers
+            - memquotas
+            - noops
+            - opas
+            - prometheuses
+            - rbacs
+            - solarwindses
+            - stackdrivers
+            - cloudwatches
+            - dogstatsds
+            - statsds
+            - stdios
+            - apikeys
+            - authorizations
+            - checknothings
+            # - kuberneteses
+            - listentries
+            - logentries
+            - metrics
+            - quotas
+            - reportnothings
+            - tracespans
+        failurePolicy: Fail
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"validatingwebhookconfiguration.yaml":"apiVersion: admissionregistration.k8s.io/v1beta1\nkind: ValidatingWebhookConfiguration\nmetadata:\n  name: istio-galley\n  namespace: istio-system\n  labels:\n    app: galley\n    chart: galley\n    heritage: Tiller\n    release: istio\n    istio: galley\nwebhooks:\n  - name: pilot.validation.istio.io\n    clientConfig:\n      service:\n        name: istio-galley\n        namespace: istio-system\n        path: \"/admitpilot\"\n      caBundle: \"\"\n    rules:\n      - operations:\n        - CREATE\n        - UPDATE\n        apiGroups:\n        - config.istio.io\n        apiVersions:\n        - v1alpha2\n        resources:\n        - httpapispecs\n        - httpapispecbindings\n        - quotaspecs\n        - quotaspecbindings\n      - operations:\n        - CREATE\n        - UPDATE\n        apiGroups:\n        - rbac.istio.io\n        apiVersions:\n        - \"*\"\n        resources:\n        - \"*\"\n      - operations:\n        - CREATE\n        - UPDATE\n        apiGroups:\n        - authentication.istio.io\n        apiVersions:\n        - \"*\"\n        resources:\n        - \"*\"\n      - operations:\n        - CREATE\n        - UPDATE\n        apiGroups:\n        - networking.istio.io\n        apiVersions:\n        - \"*\"\n        resources:\n        - destinationrules\n        - envoyfilters\n        - gateways\n        - serviceentries\n        - sidecars\n        - virtualservices\n    failurePolicy: Fail\n  - name: mixer.validation.istio.io\n    clientConfig:\n      service:\n        name: istio-galley\n        namespace: istio-system\n        path: \"/admitmixer\"\n      caBundle: \"\"\n    rules:\n      - operations:\n        - CREATE\n        - UPDATE\n        apiGroups:\n        - config.istio.io\n        apiVersions:\n        - v1alpha2\n        resources:\n        - rules\n        - attributemanifests\n        - circonuses\n        - deniers\n        - fluentds\n        - kubernetesenvs\n        - listcheckers\n        - memquotas\n        - noops\n        - opas\n        - prometheuses\n        - rbacs\n        - solarwindses\n        - stackdrivers\n        - cloudwatches\n        - dogstatsds\n        - statsds\n        - stdios\n        - apikeys\n        - authorizations\n        - checknothings\n        # - kuberneteses\n        - listentries\n        - logentries\n        - metrics\n        - quotas\n        - reportnothings\n        - tracespans\n    failurePolicy: Fail"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"app":"galley","chart":"galley","heritage":"Tiller","istio":"galley","release":"istio"},"name":"istio-galley-configuration","namespace":"istio-system"}}
+  creationTimestamp: null
+  labels:
+    app: galley
+    chart: galley
+    heritage: Tiller
+    istio: galley
+    release: istio
+  name: istio-galley-configuration
+  selfLink: /api/v1/namespaces/istio-system/configmaps/istio-galley-configuration

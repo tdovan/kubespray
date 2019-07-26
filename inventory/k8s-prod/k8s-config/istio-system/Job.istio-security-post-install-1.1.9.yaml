@@ -1,0 +1,95 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    helm.sh/hook: post-install
+    helm.sh/hook-delete-policy: hook-succeeded
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"batch/v1","kind":"Job","metadata":{"annotations":{"helm.sh/hook":"post-install","helm.sh/hook-delete-policy":"hook-succeeded"},"labels":{"app":"security","chart":"security","heritage":"Tiller","release":"istio"},"name":"istio-security-post-install-1.1.9","namespace":"istio-system"},"spec":{"template":{"metadata":{"labels":{"app":"security","chart":"security","heritage":"Tiller","release":"istio"},"name":"istio-security-post-install"},"spec":{"affinity":{"nodeAffinity":{"preferredDuringSchedulingIgnoredDuringExecution":[{"preference":{"matchExpressions":[{"key":"beta.kubernetes.io/arch","operator":"In","values":["amd64"]}]},"weight":2},{"preference":{"matchExpressions":[{"key":"beta.kubernetes.io/arch","operator":"In","values":["ppc64le"]}]},"weight":2},{"preference":{"matchExpressions":[{"key":"beta.kubernetes.io/arch","operator":"In","values":["s390x"]}]},"weight":2}],"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"beta.kubernetes.io/arch","operator":"In","values":["amd64","ppc64le","s390x"]}]}]}}},"containers":[{"command":["/bin/bash","/tmp/security/run.sh","/tmp/security/custom-resources.yaml"],"image":"docker.io/istio/kubectl:1.1.9","imagePullPolicy":"IfNotPresent","name":"kubectl","volumeMounts":[{"mountPath":"/tmp/security","name":"tmp-configmap-security"}]}],"restartPolicy":"OnFailure","serviceAccountName":"istio-security-post-install-account","volumes":[{"configMap":{"name":"istio-security-custom-resources"},"name":"tmp-configmap-security"}]}}}}
+  creationTimestamp: null
+  labels:
+    app: security
+    chart: security
+    heritage: Tiller
+    release: istio
+  name: istio-security-post-install-1.1.9
+  selfLink: /apis/batch/v1/namespaces/istio-system/jobs/istio-security-post-install-1.1.9
+spec:
+  backoffLimit: 6
+  completions: 1
+  parallelism: 1
+  selector:
+    matchLabels:
+      controller-uid: 36f930a8-93f5-11e9-96f3-0017a47700b8
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: security
+        chart: security
+        controller-uid: 36f930a8-93f5-11e9-96f3-0017a47700b8
+        heritage: Tiller
+        job-name: istio-security-post-install-1.1.9
+        release: istio
+      name: istio-security-post-install
+    spec:
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+            weight: 2
+          - preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - ppc64le
+            weight: 2
+          - preference:
+              matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - s390x
+            weight: 2
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: beta.kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+                - ppc64le
+                - s390x
+      containers:
+      - command:
+        - /bin/bash
+        - /tmp/security/run.sh
+        - /tmp/security/custom-resources.yaml
+        image: docker.io/istio/kubectl:1.1.9
+        imagePullPolicy: IfNotPresent
+        name: kubectl
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /tmp/security
+          name: tmp-configmap-security
+      dnsPolicy: ClusterFirst
+      restartPolicy: OnFailure
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: istio-security-post-install-account
+      serviceAccountName: istio-security-post-install-account
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: istio-security-custom-resources
+        name: tmp-configmap-security
+status: {}

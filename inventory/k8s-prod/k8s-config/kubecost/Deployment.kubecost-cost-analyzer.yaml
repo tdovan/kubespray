@@ -1,0 +1,197 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: cost-analyzer
+    app.kubernetes.io/instance: kubecost
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: cost-analyzer
+    helm.sh/chart: cost-analyzer-1.32.0
+  name: kubecost-cost-analyzer
+  selfLink: /apis/extensions/v1beta1/namespaces/kubecost/deployments/kubecost-cost-analyzer
+spec:
+  progressDeadlineSeconds: 2147483647
+  replicas: 1
+  revisionHistoryLimit: 2147483647
+  selector:
+    matchLabels:
+      app: cost-analyzer
+      app.kubernetes.io/instance: kubecost
+      app.kubernetes.io/name: cost-analyzer
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: cost-analyzer
+        app.kubernetes.io/instance: kubecost
+        app.kubernetes.io/name: cost-analyzer
+    spec:
+      containers:
+      - env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        image: ajaytripathy/kubecost-frontend:prod-1.32.0
+        imagePullPolicy: IfNotPresent
+        name: cost-analyzer-frontend
+        readinessProbe:
+          failureThreshold: 200
+          httpGet:
+            path: /healthz
+            port: 9003
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 100m
+            memory: 256Mi
+          requests:
+            cpu: 10m
+            memory: 55Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d/
+          name: nginx-conf
+      - env:
+        - name: PROMETHEUS_SERVER_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              key: prometheus-server-endpoint
+              name: kubecost-cost-analyzer
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /var/configs/key.json
+        - name: KUBECOST_TOKEN
+          valueFrom:
+            configMapKeyRef:
+              key: kubecost-token
+              name: kubecost-cost-analyzer
+        image: ajaytripathy/kubecost:prod-1.32.0
+        imagePullPolicy: IfNotPresent
+        name: cost-analyzer-server
+        readinessProbe:
+          failureThreshold: 200
+          httpGet:
+            path: /healthz
+            port: 9003
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 100m
+            memory: 256Mi
+          requests:
+            cpu: 10m
+            memory: 55Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/configs
+          name: persistent-configs
+      - env:
+        - name: PROMETHEUS_SERVER_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              key: prometheus-server-endpoint
+              name: kubecost-cost-analyzer
+        - name: CLOUD_PROVIDER_API_KEY
+          value: AIzaSyDXQPG_MHUEy9neR7stolq6l0ujXmjJlvk
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: /var/configs/key.json
+        - name: CONFIG_PATH
+          value: /var/configs/
+        - name: KUBECOST_TOKEN
+          valueFrom:
+            configMapKeyRef:
+              key: kubecost-token
+              name: kubecost-cost-analyzer
+        image: ajaytripathy/kubecost-cost-model:prod-1.32.0
+        imagePullPolicy: Always
+        name: cost-model
+        readinessProbe:
+          failureThreshold: 200
+          httpGet:
+            path: /healthz
+            port: 9003
+            scheme: HTTP
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          limits:
+            cpu: 800m
+            memory: 256Mi
+          requests:
+            cpu: 10m
+            memory: 55Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/configs
+          name: persistent-configs
+      dnsPolicy: ClusterFirst
+      initContainers:
+      - command:
+        - /bin/chmod
+        - -R
+        - "777"
+        - /var/configs
+        image: busybox
+        imagePullPolicy: Always
+        name: config-perms-fix
+        resources: {}
+        securityContext:
+          procMount: Default
+          runAsUser: 0
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/configs
+          name: persistent-configs
+      - env:
+        - name: PROMETHEUS_SERVER_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              key: prometheus-server-endpoint
+              name: kubecost-cost-analyzer
+        image: ajaytripathy/kubecost-init:prod-1.32.0
+        imagePullPolicy: IfNotPresent
+        name: cost-analyzer-init
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        fsGroup: 1001
+        runAsUser: 1001
+      serviceAccount: kubecost-cost-analyzer
+      serviceAccountName: kubecost-cost-analyzer
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: nginx.conf
+            path: default.conf
+          name: nginx-conf
+        name: nginx-conf
+      - name: persistent-configs
+        persistentVolumeClaim:
+          claimName: kubecost-cost-analyzer
+status: {}

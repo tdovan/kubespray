@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app: prometheus
+    chart: prometheus-8.11.0
+    component: server
+    heritage: Tiller
+    release: kubecost
+  name: kubecost-prometheus-server
+  selfLink: /api/v1/namespaces/kubecost/persistentvolumeclaims/kubecost-prometheus-server
+  annotations:
+    volume.beta.kubernetes.io/storage-class: portworx-sc
+    volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/portworx-volume
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 32Gi
+  volumeMode: Filesystem
+status: {}

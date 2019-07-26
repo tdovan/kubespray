@@ -1,0 +1,161 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: zk
+  name: zk
+  selfLink: /apis/apps/v1/namespaces/px-kafka-zookeeper/statefulsets/zk
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: zk
+  serviceName: zk-headless
+  template:
+    metadata:
+      annotations:
+        pod.alpha.kubernetes.io/initialized: "true"
+      creationTimestamp: null
+      labels:
+        app: zk
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: px/running
+                operator: NotIn
+                values:
+                - "false"
+              - key: px/enabled
+                operator: NotIn
+                values:
+                - "false"
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - zk-headless
+            topologyKey: kubernetes.io/hostname
+      containers:
+      - command:
+        - sh
+        - -c
+        - zkGenConfig.sh && zkServer.sh start-foreground
+        env:
+        - name: ZK_ENSEMBLE
+          valueFrom:
+            configMapKeyRef:
+              key: ensemble
+              name: zk-config
+        - name: ZK_HEAP_SIZE
+          valueFrom:
+            configMapKeyRef:
+              key: jvm.heap
+              name: zk-config
+        - name: ZK_TICK_TIME
+          valueFrom:
+            configMapKeyRef:
+              key: tick
+              name: zk-config
+        - name: ZK_INIT_LIMIT
+          valueFrom:
+            configMapKeyRef:
+              key: init
+              name: zk-config
+        - name: ZK_SYNC_LIMIT
+          valueFrom:
+            configMapKeyRef:
+              key: tick
+              name: zk-config
+        - name: ZK_MAX_CLIENT_CNXNS
+          valueFrom:
+            configMapKeyRef:
+              key: client.cnxns
+              name: zk-config
+        - name: ZK_SNAP_RETAIN_COUNT
+          valueFrom:
+            configMapKeyRef:
+              key: snap.retain
+              name: zk-config
+        - name: ZK_PURGE_INTERVAL
+          valueFrom:
+            configMapKeyRef:
+              key: purge.interval
+              name: zk-config
+        - name: ZK_CLIENT_PORT
+          value: "2181"
+        - name: ZK_SERVER_PORT
+          value: "2888"
+        - name: ZK_ELECTION_PORT
+          value: "3888"
+        image: gcr.io/google_samples/k8szk:v1
+        imagePullPolicy: Always
+        livenessProbe:
+          exec:
+            command:
+            - zkOk.sh
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        name: k8szk
+        ports:
+        - containerPort: 2181
+          name: client
+          protocol: TCP
+        - containerPort: 2888
+          name: server
+          protocol: TCP
+        - containerPort: 3888
+          name: leader-election
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - zkOk.sh
+          failureThreshold: 3
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 5
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/lib/zookeeper
+          name: datadir
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: stork
+      securityContext:
+        fsGroup: 1000
+        runAsUser: 1000
+      terminationGracePeriodSeconds: 30
+  updateStrategy:
+    type: OnDelete
+  volumeClaimTemplates:
+  - metadata:
+      creationTimestamp: null
+      name: datadir
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
+      storageClassName: portworx-sc
+      volumeMode: Filesystem
+    status:
+      phase: Pending
+status:
+  replicas: 0

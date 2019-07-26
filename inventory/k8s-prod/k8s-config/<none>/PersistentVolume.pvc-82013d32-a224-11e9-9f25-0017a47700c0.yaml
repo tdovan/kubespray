@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  annotations:
+    kubernetes.io/createdby: portworx-volume-dynamic-provisioner
+    pv.kubernetes.io/bound-by-controller: "yes"
+    pv.kubernetes.io/provisioned-by: kubernetes.io/portworx-volume
+  creationTimestamp: null
+  finalizers:
+  - kubernetes.io/pv-protection
+  name: pvc-82013d32-a224-11e9-9f25-0017a47700c0
+  selfLink: /api/v1/persistentvolumes/pvc-82013d32-a224-11e9-9f25-0017a47700c0
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 3Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: data-kafka-2
+    namespace: px-kafka-zookeeper
+    resourceVersion: "5419654"
+    uid: 82013d32-a224-11e9-9f25-0017a47700c0
+  persistentVolumeReclaimPolicy: Delete
+  portworxVolume:
+    volumeID: "732963998892139207"
+  storageClassName: portworx-sc-rep2
+  volumeMode: Filesystem
+status: {}

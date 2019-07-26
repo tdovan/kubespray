@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  creationTimestamp: null
+  labels:
+    app: prometheus
+    chart: prometheus-8.11.0
+    component: node-exporter
+    heritage: Tiller
+    release: kubecost
+  name: kubecost-prometheus-node-exporter
+  selfLink: /api/v1/namespaces/kubecost/services/kubecost-prometheus-node-exporter
+spec:
+  clusterIP: None
+  ports:
+  - name: metrics
+    port: 9100
+    protocol: TCP
+    targetPort: 9100
+  selector:
+    app: prometheus
+    component: node-exporter
+    release: kubecost
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

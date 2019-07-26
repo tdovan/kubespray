@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: zk-headless
+  name: zk-headless
+  selfLink: /api/v1/namespaces/px-kafka-zookeeper/services/zk-headless
+spec:
+  clusterIP: None
+  ports:
+  - name: server
+    port: 2888
+    protocol: TCP
+    targetPort: 2888
+  - name: leader-election
+    port: 3888
+    protocol: TCP
+    targetPort: 3888
+  selector:
+    app: zk
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

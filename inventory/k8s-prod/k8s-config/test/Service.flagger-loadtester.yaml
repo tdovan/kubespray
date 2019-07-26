@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app.kubernetes.io/instance: flagger-loadtester
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: loadtester
+    helm.sh/chart: loadtester-0.4.1
+  name: flagger-loadtester
+  selfLink: /api/v1/namespaces/test/services/flagger-loadtester
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: http
+    nodePort: 31020
+    port: 80
+    protocol: TCP
+    targetPort: http
+  selector:
+    app: loadtester
+  sessionAffinity: None
+  type: LoadBalancer
+status:
+  loadBalancer: {}

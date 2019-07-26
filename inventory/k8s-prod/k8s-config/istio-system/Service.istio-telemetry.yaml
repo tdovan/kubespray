@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","kind":"Service","metadata":{"annotations":{"networking.istio.io/exportTo":"*"},"labels":{"app":"mixer","chart":"mixer","heritage":"Tiller","istio":"mixer","release":"istio"},"name":"istio-telemetry","namespace":"istio-system"},"spec":{"ports":[{"name":"grpc-mixer","port":9091},{"name":"grpc-mixer-mtls","port":15004},{"name":"http-monitoring","port":15014},{"name":"prometheus","port":42422}],"selector":{"istio":"mixer","istio-mixer-type":"telemetry"}}}
+    networking.istio.io/exportTo: '*'
+  creationTimestamp: null
+  labels:
+    app: mixer
+    chart: mixer
+    heritage: Tiller
+    istio: mixer
+    release: istio
+  name: istio-telemetry
+  selfLink: /api/v1/namespaces/istio-system/services/istio-telemetry
+spec:
+  ports:
+  - name: grpc-mixer
+    port: 9091
+    protocol: TCP
+    targetPort: 9091
+  - name: grpc-mixer-mtls
+    port: 15004
+    protocol: TCP
+    targetPort: 15004
+  - name: http-monitoring
+    port: 15014
+    protocol: TCP
+    targetPort: 15014
+  - name: prometheus
+    port: 42422
+    protocol: TCP
+    targetPort: 42422
+  selector:
+    istio: mixer
+    istio-mixer-type: telemetry
+  sessionAffinity: None
+  type: ClusterIP
+status:
+  loadBalancer: {}

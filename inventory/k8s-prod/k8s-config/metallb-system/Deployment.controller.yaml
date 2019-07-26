@@ -1,0 +1,71 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"apps/v1beta2","kind":"Deployment","metadata":{"annotations":{},"labels":{"app":"metallb","component":"controller"},"name":"controller","namespace":"metallb-system"},"spec":{"revisionHistoryLimit":3,"selector":{"matchLabels":{"app":"metallb","component":"controller"}},"template":{"metadata":{"annotations":{"prometheus.io/port":"7472","prometheus.io/scrape":"true"},"labels":{"app":"metallb","component":"controller"}},"spec":{"containers":[{"args":["--port=7472","--config=config"],"image":"metallb/controller:v0.7.3","imagePullPolicy":"IfNotPresent","name":"controller","ports":[{"containerPort":7472,"name":"monitoring"}],"resources":{"limits":{"cpu":"100m","memory":"100Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["all"]},"readOnlyRootFilesystem":true}}],"securityContext":{"runAsNonRoot":true,"runAsUser":65534},"serviceAccountName":"controller","terminationGracePeriodSeconds":0}}}}
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: metallb
+    component: controller
+  name: controller
+  selfLink: /apis/extensions/v1beta1/namespaces/metallb-system/deployments/controller
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: metallb
+      component: controller
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        prometheus.io/port: "7472"
+        prometheus.io/scrape: "true"
+      creationTimestamp: null
+      labels:
+        app: metallb
+        component: controller
+    spec:
+      containers:
+      - args:
+        - --port=7472
+        - --config=config
+        image: metallb/controller:v0.7.3
+        imagePullPolicy: IfNotPresent
+        name: controller
+        ports:
+        - containerPort: 7472
+          name: monitoring
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - all
+          procMount: Default
+          readOnlyRootFilesystem: true
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+      serviceAccount: controller
+      serviceAccountName: controller
+      terminationGracePeriodSeconds: 0
+status: {}

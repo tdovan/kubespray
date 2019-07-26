@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  NannyConfiguration: |-
+    apiVersion: nannyconfig/v1alpha1
+    kind: NannyConfiguration
+kind: ConfigMap
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"v1","data":{"NannyConfiguration":"apiVersion: nannyconfig/v1alpha1\nkind: NannyConfiguration"},"kind":"ConfigMap","metadata":{"annotations":{},"labels":{"addonmanager.kubernetes.io/mode":"EnsureExists","kubernetes.io/cluster-service":"true"},"name":"metrics-server-config","namespace":"kube-system"}}
+  creationTimestamp: null
+  labels:
+    addonmanager.kubernetes.io/mode: EnsureExists
+    kubernetes.io/cluster-service: "true"
+  name: metrics-server-config
+  selfLink: /api/v1/namespaces/kube-system/configmaps/metrics-server-config

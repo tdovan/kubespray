@@ -1,0 +1,17 @@
+apiVersion: v1
+data:
+  lhconfig: |
+    servercert: ''
+    serverkey: ''
+    ADMIN_USER: admin
+    ADMIN_PASSWORD: $2y$10$HeU6ErdL9KL0oLixfBSFausJ0P9FoYPYsRab7FxhJ.AcZGUzkRp3O
+    company:
+        name: Portworx
+        id: '1'
+    clusters:
+        - { scheme: http, uuid: f1c50dfe-970e-4bd8-8223-bfc5a0bd9abb, clusterid: px-cluster-ac57a555-6f67-48d0-a007-7c181b04ab04, endpoint: 10.202.115.138, port: '9001', grafana: '', prometheus: '', kibana: '', clientcertificates: { key: '', cert: '' }, scheduler: kubernetes, version: 2.0.3.7-8d3c0dc, kubeConfig: '' }
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: px-lighthouse-config
+  selfLink: /api/v1/namespaces/kube-system/configmaps/px-lighthouse-config

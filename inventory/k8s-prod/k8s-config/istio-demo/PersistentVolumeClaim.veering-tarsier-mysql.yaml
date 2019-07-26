@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    pv.kubernetes.io/bind-completed: "yes"
+    pv.kubernetes.io/bound-by-controller: "yes"
+    volume.beta.kubernetes.io/storage-provisioner: kubernetes.io/portworx-volume
+  creationTimestamp: null
+  finalizers:
+  - kubernetes.io/pvc-protection
+  labels:
+    app: veering-tarsier-mysql
+    chart: mysql-1.2.1
+    heritage: Tiller
+    release: veering-tarsier
+  name: veering-tarsier-mysql
+  selfLink: /api/v1/namespaces/istio-demo/persistentvolumeclaims/veering-tarsier-mysql
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: portworx-sc
+  volumeMode: Filesystem
+  volumeName: pvc-b5743137-99a1-11e9-be54-0017a47700b8
+status: {}

@@ -1,0 +1,20 @@
+apiVersion: v1
+data:
+  datasources.yaml: |-
+    apiVersion: 1
+
+    deleteDatasources:
+      - name: prometheus
+    datasources:
+    - name: prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus.istio-system:9090
+      isDefault: true
+      editable: true
+      version: 1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: flagger-grafana-datasources
+  selfLink: /api/v1/namespaces/istio-system/configmaps/flagger-grafana-datasources

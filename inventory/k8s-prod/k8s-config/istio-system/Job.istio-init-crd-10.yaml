@@ -1,0 +1,57 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"batch/v1","kind":"Job","metadata":{"annotations":{},"name":"istio-init-crd-10","namespace":"istio-system"},"spec":{"template":{"metadata":{"annotations":{"sidecar.istio.io/inject":"false"}},"spec":{"containers":[{"command":["kubectl","apply","-f","/etc/istio/crd-10/crd-10.yaml"],"image":"docker.io/istio/kubectl:1.1.9","imagePullPolicy":"IfNotPresent","name":"istio-init-crd-10","volumeMounts":[{"mountPath":"/etc/istio/crd-10","name":"crd-10","readOnly":true}]}],"restartPolicy":"OnFailure","serviceAccountName":"istio-init-service-account","volumes":[{"configMap":{"name":"istio-crd-10"},"name":"crd-10"}]}}}}
+  creationTimestamp: null
+  labels:
+    controller-uid: b936f325-97d0-11e9-96f3-0017a47700b8
+    job-name: istio-init-crd-10
+  name: istio-init-crd-10
+  selfLink: /apis/batch/v1/namespaces/istio-system/jobs/istio-init-crd-10
+spec:
+  backoffLimit: 6
+  completions: 1
+  parallelism: 1
+  selector:
+    matchLabels:
+      controller-uid: b936f325-97d0-11e9-96f3-0017a47700b8
+  template:
+    metadata:
+      annotations:
+        sidecar.istio.io/inject: "false"
+      creationTimestamp: null
+      labels:
+        controller-uid: b936f325-97d0-11e9-96f3-0017a47700b8
+        job-name: istio-init-crd-10
+    spec:
+      containers:
+      - command:
+        - kubectl
+        - apply
+        - -f
+        - /etc/istio/crd-10/crd-10.yaml
+        image: docker.io/istio/kubectl:1.1.9
+        imagePullPolicy: IfNotPresent
+        name: istio-init-crd-10
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/istio/crd-10
+          name: crd-10
+          readOnly: true
+      dnsPolicy: ClusterFirst
+      restartPolicy: OnFailure
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: istio-init-service-account
+      serviceAccountName: istio-init-service-account
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: istio-crd-10
+        name: crd-10
+status: {}

@@ -1,0 +1,23 @@
+apiVersion: v1
+data:
+  datasource.yaml: |-
+    # config file version
+    apiVersion: 1
+    datasources:
+    - access: proxy
+      isDefault: true
+      name: Prometheus
+      type: prometheus
+      url: http://kubecost-prometheus-server.kubecost.svc.cluster.local
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    app: cost-analyzer
+    app.kubernetes.io/instance: kubecost
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: cost-analyzer
+    grafana_datasource: "1"
+    helm.sh/chart: cost-analyzer-1.32.0
+  name: grafana-datasource
+  selfLink: /api/v1/namespaces/kubecost/configmaps/grafana-datasource

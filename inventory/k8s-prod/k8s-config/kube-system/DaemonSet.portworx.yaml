@@ -1,0 +1,168 @@
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  annotations:
+    kubectl.kubernetes.io/last-applied-configuration: |
+      {"apiVersion":"extensions/v1beta1","kind":"DaemonSet","metadata":{"annotations":{"portworx.com/install-source":"https://install.portworx.com/?mc=false\u0026kbver=1.13.5\u0026k=etcd%3Ahttp%3A%2F%2Fetcd1.jear.co%3A2379%2Cetcd%3Ahttp%3A%2F%2Fetcd2.jear.co%3A2379%2Cetcd%3Ahttp%3A%2F%2Fetcd3.jear.co%3A2379\u0026f=true\u0026m=enp2s0f0\u0026d=enp2s0f1\u0026c=px-cluster-284a0359-3c2e-4abf-b0c1-5c05af36ffec\u0026stork=true\u0026lh=true\u0026st=k8s"},"name":"portworx","namespace":"kube-system"},"spec":{"minReadySeconds":0,"template":{"metadata":{"labels":{"name":"portworx"}},"spec":{"affinity":{"nodeAffinity":{"requiredDuringSchedulingIgnoredDuringExecution":{"nodeSelectorTerms":[{"matchExpressions":[{"key":"px/enabled","operator":"NotIn","values":["false"]}]}]}}},"containers":[{"args":["-k","etcd:http://etcd1.jear.co:2379,etcd:http://etcd2.jear.co:2379,etcd:http://etcd3.jear.co:2379","-c","px-cluster-284a0359-3c2e-4abf-b0c1-5c05af36ffec","-d","enp2s0f1","-m","enp2s0f0","-A","-f","-secret_type","k8s","-x","kubernetes"],"env":[{"name":"AUTO_NODE_RECOVERY_TIMEOUT_IN_SECS","value":"1500"},{"name":"PX_TEMPLATE_VERSION","value":"v4"}],"image":"portworx/oci-monitor:2.0.3.7","imagePullPolicy":"Always","livenessProbe":{"httpGet":{"host":"127.0.0.1","path":"/status","port":9001},"initialDelaySeconds":840,"periodSeconds":30},"name":"portworx","readinessProbe":{"httpGet":{"host":"127.0.0.1","path":"/health","port":9015},"periodSeconds":10},"securityContext":{"privileged":true},"terminationMessagePath":"/tmp/px-termination-log","volumeMounts":[{"mountPath":"/var/cores","name":"diagsdump"},{"mountPath":"/var/run/docker.sock","name":"dockersock"},{"mountPath":"/run/containerd","name":"containerdsock"},{"mountPath":"/etc/pwx","name":"etcpwx"},{"mountPath":"/opt/pwx","name":"optpwx"},{"mountPath":"/host_proc","name":"procmount"},{"mountPath":"/etc/systemd/system","name":"sysdmount"},{"mountPath":"/var/run/log","name":"journalmount1","readOnly":true},{"mountPath":"/var/log","name":"journalmount2","readOnly":true},{"mountPath":"/var/run/dbus","name":"dbusmount"}]}],"hostNetwork":true,"hostPID":false,"restartPolicy":"Always","serviceAccountName":"px-account","volumes":[{"hostPath":{"path":"/var/cores"},"name":"diagsdump"},{"hostPath":{"path":"/var/run/docker.sock"},"name":"dockersock"},{"hostPath":{"path":"/run/containerd"},"name":"containerdsock"},{"hostPath":{"path":"/etc/pwx"},"name":"etcpwx"},{"hostPath":{"path":"/opt/pwx"},"name":"optpwx"},{"hostPath":{"path":"/proc"},"name":"procmount"},{"hostPath":{"path":"/etc/systemd/system"},"name":"sysdmount"},{"hostPath":{"path":"/var/run/log"},"name":"journalmount1"},{"hostPath":{"path":"/var/log"},"name":"journalmount2"},{"hostPath":{"path":"/var/run/dbus"},"name":"dbusmount"}]}},"updateStrategy":{"rollingUpdate":{"maxUnavailable":1},"type":"RollingUpdate"}}}
+    portworx.com/install-source: https://install.portworx.com/?mc=false&kbver=1.13.5&k=etcd%3Ahttp%3A%2F%2Fetcd1.jear.co%3A2379%2Cetcd%3Ahttp%3A%2F%2Fetcd2.jear.co%3A2379%2Cetcd%3Ahttp%3A%2F%2Fetcd3.jear.co%3A2379&f=true&m=enp2s0f0&d=enp2s0f1&c=px-cluster-284a0359-3c2e-4abf-b0c1-5c05af36ffec&stork=true&lh=true&st=k8s
+  creationTimestamp: null
+  generation: 1
+  labels:
+    name: portworx
+  name: portworx
+  selfLink: /apis/extensions/v1beta1/namespaces/kube-system/daemonsets/portworx
+spec:
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      name: portworx
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        name: portworx
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: px/enabled
+                operator: NotIn
+                values:
+                - "false"
+      containers:
+      - args:
+        - -k
+        - etcd:http://etcd1.jear.co:2379,etcd:http://etcd2.jear.co:2379,etcd:http://etcd3.jear.co:2379
+        - -c
+        - px-cluster-284a0359-3c2e-4abf-b0c1-5c05af36ffec
+        - -d
+        - enp2s0f1
+        - -m
+        - enp2s0f0
+        - -A
+        - -f
+        - -secret_type
+        - k8s
+        - -x
+        - kubernetes
+        - s
+        - /dev/sdb
+        env:
+        - name: AUTO_NODE_RECOVERY_TIMEOUT_IN_SECS
+          value: "1500"
+        - name: PX_TEMPLATE_VERSION
+          value: v4
+        image: portworx/oci-monitor:2.0.3.7
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            host: 127.0.0.1
+            path: /status
+            port: 9001
+            scheme: HTTP
+          initialDelaySeconds: 840
+          periodSeconds: 30
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: portworx
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            host: 127.0.0.1
+            path: /health
+            port: 9015
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        securityContext:
+          privileged: true
+          procMount: Default
+        terminationMessagePath: /tmp/px-termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/cores
+          name: diagsdump
+        - mountPath: /var/run/docker.sock
+          name: dockersock
+        - mountPath: /run/containerd
+          name: containerdsock
+        - mountPath: /etc/pwx
+          name: etcpwx
+        - mountPath: /opt/pwx
+          name: optpwx
+        - mountPath: /host_proc
+          name: procmount
+        - mountPath: /etc/systemd/system
+          name: sysdmount
+        - mountPath: /var/run/log
+          name: journalmount1
+          readOnly: true
+        - mountPath: /var/log
+          name: journalmount2
+          readOnly: true
+        - mountPath: /var/run/dbus
+          name: dbusmount
+      dnsPolicy: ClusterFirst
+      hostNetwork: true
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: px-account
+      serviceAccountName: px-account
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - hostPath:
+          path: /var/cores
+          type: ""
+        name: diagsdump
+      - hostPath:
+          path: /var/run/docker.sock
+          type: ""
+        name: dockersock
+      - hostPath:
+          path: /run/containerd
+          type: ""
+        name: containerdsock
+      - hostPath:
+          path: /etc/pwx
+          type: ""
+        name: etcpwx
+      - hostPath:
+          path: /opt/pwx
+          type: ""
+        name: optpwx
+      - hostPath:
+          path: /proc
+          type: ""
+        name: procmount
+      - hostPath:
+          path: /etc/systemd/system
+          type: ""
+        name: sysdmount
+      - hostPath:
+          path: /var/run/log
+          type: ""
+        name: journalmount1
+      - hostPath:
+          path: /var/log
+          type: ""
+        name: journalmount2
+      - hostPath:
+          path: /var/run/dbus
+          type: ""
+        name: dbusmount
+  templateGeneration: 1
+  updateStrategy:
+    rollingUpdate:
+      maxUnavailable: 1
+    type: RollingUpdate
+status:
+  currentNumberScheduled: 0
+  desiredNumberScheduled: 0
+  numberMisscheduled: 0
+  numberReady: 0

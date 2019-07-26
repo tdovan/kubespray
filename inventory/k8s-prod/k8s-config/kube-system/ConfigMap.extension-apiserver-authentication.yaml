@@ -1,0 +1,48 @@
+apiVersion: v1
+data:
+  client-ca-file: |
+    -----BEGIN CERTIFICATE-----
+    MIICyDCCAbCgAwIBAgIBADANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwprdWJl
+    cm5ldGVzMB4XDTE5MDYxNzE1MTQ0NVoXDTI5MDYxNDE1MTQ0NVowFTETMBEGA1UE
+    AxMKa3ViZXJuZXRlczCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBAM8+
+    QWf7oI+jCZ9d6BoLo+UQXHMD0sTSlUy4DiuucyPgCGcZRjZeGYNHBXrdRlDUANAy
+    Bw5DwKgYfk4Xi7lTZ7oyfWX0PkNGphhD0g4aWlarl1U+6S22DwplKbBCsiVq4dQ8
+    /grflkly8ENpKn8WnFefNLdVzCVq9kJPY9qZxffVYnhfqdoYp2ihhOSyFddIJxUd
+    e3cQQHEMcdeJtlG3NFwtp9txxO2zb0lJamOALV1r9fph5/cDw0pdeAwNDnsPn7jh
+    HRFFXs9rw56yWX1A/L+tcS+9V6/ffRtGgJtKvJ8sky80CVTMEWms4vXVGuHEcwD0
+    /Q/0W+cItoqUgHCIYm0CAwEAAaMjMCEwDgYDVR0PAQH/BAQDAgKkMA8GA1UdEwEB
+    /wQFMAMBAf8wDQYJKoZIhvcNAQELBQADggEBAApbBp1yn7Lldgl8UHFYrHkRmVzD
+    brom/34G0AwqLGOO3/nGMbJh2Wtn0XQ6RAWfvDxQcSy438hLyzrN3Yqr5IaXo1sK
+    iTbR3PXfQXT4lHxih6NmO1jO42Sq/v8J20/90D9Su9KQ62SMGrtTSiYFCz9tyzRU
+    pZwFgArXJm57a46JZ/BSArN2h53rYvFfscwsC9gBj62hW60ZohVcINbFsnDml4N8
+    Kg8u3VO1vmJ48BITlqN7oQ1yXO4kWeQEQPWtuiZM1m/6pYNUcF7qQ9rhITWwt5PT
+    laFNwU56c7UjuM2guaeGoGXXvaw+ZXi/WqWm64yqkpxE7VFHdZGVqA0MwaU=
+    -----END CERTIFICATE-----
+  requestheader-allowed-names: '["front-proxy-client"]'
+  requestheader-client-ca-file: |
+    -----BEGIN CERTIFICATE-----
+    MIIC0DCCAbigAwIBAgIBADANBgkqhkiG9w0BAQsFADAZMRcwFQYDVQQDEw5mcm9u
+    dC1wcm94eS1jYTAeFw0xOTA2MTcxNTE0NDNaFw0yOTA2MTQxNTE0NDNaMBkxFzAV
+    BgNVBAMTDmZyb250LXByb3h5LWNhMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIB
+    CgKCAQEA1dKZudO7uWsEC+QEQy7CaegpTkMDjoro7V2XxHAvskHjALdbviMh1UVn
+    V3UrznQ4gmmTBM2L7E6kHoWz281pQncNY9j6CZD5YpqHAHXxlUA1Lf5HMLKH8abf
+    91H7wRtW9NjkU193czBbJkmzO0JkGENDpCbYVggXTWbYkR7FdDGdklChs2nsS4gT
+    NHWwEykHJcAgWDfrQe2vBG0gybbPVYVa/nzZQYaeHJf/HgThBW/GgJ/YmiuFoHWW
+    NhqFU9rA1tK67JGm7jFsYCPEM222Rk1ifjD0hW1NheUS0eozDjnCCK8P4PWf9556
+    1BoCUTdOBPJw5s7HpLG/FsKglPKHawIDAQABoyMwITAOBgNVHQ8BAf8EBAMCAqQw
+    DwYDVR0TAQH/BAUwAwEB/zANBgkqhkiG9w0BAQsFAAOCAQEAeNkfnAOtjZ2vRB8I
+    aEkUI8hhStTVLFdJjYyiIGxB6rlAhC16RSvdipFLM6mHV5gGUfD6YTSM97FvS3No
+    76E2irPi40NT99rNXXZERJbdYKAxeSO1mJmfgj5clVrHGK38LSfSAyOPEPWchTY3
+    Q8oz1pmwQ2lOOV4SHoEjFF3wR6F0MjB7nEqD9Ey7qiFhen8tNa/PggpvaZWhzNya
+    VU/3uV6F9J9syvQi8DKkmMV+5mS4hgtFDO0Ui0Zq33dKN29Un7B33VP1EFHoPXbW
+    S/vj97VkWFrcFZdtiazeXGNhuxEhb8MjLAO64oS8qLxh4mDArqxrhnhV7vsMkCpb
+    4GTIyg==
+    -----END CERTIFICATE-----
+  requestheader-extra-headers-prefix: '["X-Remote-Extra-"]'
+  requestheader-group-headers: '["X-Remote-Group"]'
+  requestheader-username-headers: '["X-Remote-User"]'
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: extension-apiserver-authentication
+  selfLink: /api/v1/namespaces/kube-system/configmaps/extension-apiserver-authentication

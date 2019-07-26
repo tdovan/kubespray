@@ -1,0 +1,129 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app: kafka
+  name: kafka
+  selfLink: /apis/apps/v1/namespaces/px-kafka-zookeeper/statefulsets/kafka
+spec:
+  podManagementPolicy: OrderedReady
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: kafka
+  serviceName: kafka-broker
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: kafka
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: px/running
+                operator: NotIn
+                values:
+                - "false"
+              - key: px/enabled
+                operator: NotIn
+                values:
+                - "false"
+      containers:
+      - command:
+        - ./bin/kafka-server-start.sh
+        - /etc/kafka/server.properties
+        - --override
+        - zookeeper.connect=zk-0.zk-headless.px-kafka-zookeeper.svc.k8s-prod:2181,zk-1.zk-headless.px-kafka-zookeeper.svc.k8s-prod:2181,zk-2.zk-headless.px-kafka-zookeeper.svc.k8s-prod:2181
+        - --override
+        - log.retention.hours=-1
+        - --override
+        - log.dirs=/var/lib/kafka/data/topics
+        - --override
+        - auto.create.topics.enable=false
+        env:
+        - name: KAFKA_LOG4J_OPTS
+          value: -Dlog4j.configuration=file:/etc/kafka/log4j.properties
+        image: solsson/kafka:0.11.0.0@sha256:b27560de08d30ebf96d12e74f80afcaca503ad4ca3103e63b1fd43a2e4c976ce
+        imagePullPolicy: IfNotPresent
+        name: broker
+        ports:
+        - containerPort: 9092
+          protocol: TCP
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - echo "" | nc -w 1 127.0.0.1 9092
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/kafka
+          name: config
+        - mountPath: /var/lib/kafka/data
+          name: data
+      dnsPolicy: ClusterFirst
+      initContainers:
+      - command:
+        - /bin/bash
+        - /etc/kafka-configmap/init.sh
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: spec.nodeName
+        image: solsson/kafka-initutils@sha256:c275d681019a0d8f01295dbd4a5bae3cfa945c8d0f7f685ae1f00f2579f08c7d
+        imagePullPolicy: IfNotPresent
+        name: init-config
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /etc/kafka-configmap
+          name: configmap
+        - mountPath: /etc/kafka
+          name: config
+      restartPolicy: Always
+      schedulerName: stork
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - configMap:
+          defaultMode: 420
+          name: broker-config
+        name: configmap
+      - emptyDir: {}
+        name: config
+  updateStrategy:
+    type: OnDelete
+  volumeClaimTemplates:
+  - metadata:
+      creationTimestamp: null
+      name: data
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 3Gi
+      storageClassName: portworx-sc-rep2
+      volumeMode: Filesystem
+    status:
+      phase: Pending
+status:
+  replicas: 0

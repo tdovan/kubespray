@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  kubecost-token: dGFuLmRvdmFuQGhwZS5jb20=xm343yadf98
+  prometheus-alertmanager-endpoint: http://kubecost-prometheus-alertmanager.kubecost.svc.cluster.local
+  prometheus-server-endpoint: http://kubecost-prometheus-server.kubecost.svc.cluster.local
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    app: cost-analyzer
+    app.kubernetes.io/instance: kubecost
+    app.kubernetes.io/managed-by: Tiller
+    app.kubernetes.io/name: cost-analyzer
+    helm.sh/chart: cost-analyzer-1.32.0
+  name: kubecost-cost-analyzer
+  selfLink: /api/v1/namespaces/kubecost/configmaps/kubecost-cost-analyzer
